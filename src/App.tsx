@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Activity, Brain, Cable, CircleHelp, Gauge, Pause, Play, Plus, Radio, RotateCcw, Settings2, Sparkles, Zap } from 'lucide-react';
+import { Activity, Brain, Cable, CircleHelp, Eye, EyeOff, Gauge, Pause, Play, Plus, Radio, RotateCcw, Settings2, Sparkles, Zap } from 'lucide-react';
 import NeuralScene from './components/NeuralScene';
 import { DEFAULT_POPULATIONS, type NetworkSnapshot, type NeuronKind, type NeuronModel } from './engine/BrainNetwork';
 import type { WorkerCommand, WorkerResponse } from './engine/protocol';
@@ -12,6 +12,7 @@ export default function App() {
   const [running, setRunning] = useState(true);
   const [speed, setSpeed] = useState(1);
   const [selected, setSelected] = useState<number | null>(null);
+  const [showConnections, setShowConnections] = useState(false);
   const [tab, setTab] = useState<'overview' | 'inspector'>('overview');
   const [workerError, setWorkerError] = useState('');
   const [populationName, setPopulationName] = useState('New population');
@@ -115,9 +116,9 @@ export default function App() {
         </aside>
 
         <section className="center-stage">
-          <div className="stage-toolbar"><div className="stage-title"><span className="eyebrow">LIVE ENVIRONMENT</span><b>Interconnected neural populations</b></div><div className="stage-actions"><button className={tab === 'overview' ? 'tool active' : 'tool'} onClick={() => setTab('overview')}><Gauge size={14}/> Overview</button><button className={tab === 'inspector' ? 'tool active' : 'tool'} onClick={() => setTab('inspector')}><Settings2 size={14}/> Circuit editor</button></div></div>
+          <div className="stage-toolbar"><div className="stage-title"><span className="eyebrow">LIVE ENVIRONMENT</span><b>Interconnected neural populations</b></div><div className="stage-actions"><button className={showConnections ? 'tool active' : 'tool'} onClick={() => setShowConnections(value => !value)} title="Show or hide all synaptic pathways">{showConnections ? <Eye size={14}/> : <EyeOff size={14}/>} Pathways</button><button className={tab === 'overview' ? 'tool active' : 'tool'} onClick={() => setTab('overview')}><Gauge size={14}/> Overview</button><button className={tab === 'inspector' ? 'tool active' : 'tool'} onClick={() => setTab('inspector')}><Settings2 size={14}/> Circuit editor</button></div></div>
           <div className="scene-wrap">
-            {snapshot.neurons.length ? <NeuralScene snapshot={snapshot} running={running} selected={selected} onSelect={id => { setSelected(id); if (id !== null) setTab('inspector'); }}/> : <div className="scene-loading"><Brain size={28}/> Initializing neural simulation…</div>}
+            {snapshot.neurons.length ? <NeuralScene snapshot={snapshot} running={running} selected={selected} showConnections={showConnections} onSelect={id => { setSelected(id); if (id !== null) setTab('inspector'); }}/> : <div className="scene-loading"><Brain size={28}/> Initializing neural simulation…</div>}
             <div className="scene-label scene-label-top"><span className="legend-dot excitatory"/> Excitatory <span className="legend-dot inhibitory"/> Inhibitory <span className="legend-dot izh"/> Izhikevich <span className="legend-dot pulse"/> In-flight signal</div>
             <div className="scene-label scene-label-bottom">3D NEURAL FIELD <span>{snapshot.neurons.length} NEURONS · {snapshot.synapses.length.toLocaleString()} SYNAPSES</span></div>
           </div>
