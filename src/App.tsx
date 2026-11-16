@@ -81,7 +81,7 @@ export default function App() {
     <main className="app-shell">
       <header className="topbar">
         <div className="brand"><div className="brand-mark"><Brain size={20}/></div><div><div className="brand-name">NEURAL UNIVERSE</div><div className="brand-sub">BRAIN-INSPIRED COMPUTATIONAL LAB</div></div></div>
-        <div className="top-status"><span className={running ? 'live-dot' : 'paused-dot'}/>{running ? 'SIMULATION RUNNING' : 'SIMULATION PAUSED'}<span className="version">WEB WORKER · ALPHA 0.2</span></div>
+        <div className="top-status"><span className={running ? 'live-dot' : 'paused-dot'}/>{running ? 'SIMULATION RUNNING' : 'SIMULATION PAUSED'}<span className="version">ORGANIC MORPHOLOGY · ALPHA 0.3</span></div>
         <button className="icon-button" title="About this prototype"><CircleHelp size={17}/></button>
       </header>
 
@@ -116,7 +116,7 @@ export default function App() {
         </aside>
 
         <section className="center-stage">
-          <div className="stage-toolbar"><div className="stage-title"><span className="eyebrow">LIVE ENVIRONMENT</span><b>Interconnected neural populations</b></div><div className="stage-actions"><button className={showConnections ? 'tool active' : 'tool'} onClick={() => setShowConnections(value => !value)} title="Show or hide all synaptic pathways">{showConnections ? <Eye size={14}/> : <EyeOff size={14}/>} Pathways</button><button className={tab === 'overview' ? 'tool active' : 'tool'} onClick={() => setTab('overview')}><Gauge size={14}/> Overview</button><button className={tab === 'inspector' ? 'tool active' : 'tool'} onClick={() => setTab('inspector')}><Settings2 size={14}/> Circuit editor</button></div></div>
+          <div className="stage-toolbar"><div className="stage-title"><span className="eyebrow">LIVE ENVIRONMENT</span><b>Interconnected neural populations</b></div><div className="stage-actions"><button className={showConnections ? 'tool active' : 'tool'} onClick={() => setShowConnections(value => !value)} title="Show or hide all synaptic pathways">{showConnections ? <Eye size={14}/> : <EyeOff size={14}/>} {showConnections ? 'Hide pathways' : 'Show pathways'}</button><button className={tab === 'overview' ? 'tool active' : 'tool'} onClick={() => setTab('overview')}><Gauge size={14}/> Overview</button><button className={tab === 'inspector' ? 'tool active' : 'tool'} onClick={() => setTab('inspector')}><Settings2 size={14}/> Circuit editor</button></div></div>
           <div className="scene-wrap">
             {snapshot.neurons.length ? <NeuralScene snapshot={snapshot} running={running} selected={selected} showConnections={showConnections} onSelect={id => { setSelected(id); if (id !== null) setTab('inspector'); }}/> : <div className="scene-loading"><Brain size={28}/> Initializing neural simulation…</div>}
             <div className="scene-label scene-label-top"><span className="legend-dot excitatory"/> Excitatory <span className="legend-dot inhibitory"/> Inhibitory <span className="legend-dot izh"/> Izhikevich <span className="legend-dot pulse"/> In-flight signal</div>
@@ -148,7 +148,7 @@ export default function App() {
             <button className="text-button" onClick={() => setSelected(null)}>Clear selection</button>
           </>}
           {workerError && <div className="error-callout">{workerError}</div>}
-          <div className="right-foot">NEURAL UNIVERSE <span>ALPHA 0.2</span></div>
+          <div className="right-foot">NEURAL UNIVERSE <span>ALPHA 0.3</span></div>
         </aside>
       </div>
     </main>
