@@ -355,15 +355,20 @@ export default function NeuralScene({ snapshot, running, selected, showConnectio
       starGeometry.dispose();
       (selectionHalo.geometry as THREE.BufferGeometry).dispose();
       (selectionHalo.material as THREE.Material).dispose();
+      const managedObjects = new Set<THREE.Object3D>([somaMesh, dendrites, edgeMesh, signals, selectionHalo]);
       scene.traverse(object => {
         if (object instanceof THREE.Sprite) {
           const material = object.material as THREE.SpriteMaterial;
           material.map?.dispose();
           material.dispose();
-        } else if (object instanceof THREE.Mesh && ![somaMesh, dendrites, edgeMesh, signals, selectionHalo].includes(object as THREE.Mesh)) {
+        } else if (object instanceof THREE.Mesh && !managedObjects.has(object)) {
           (object.geometry as THREE.BufferGeometry).dispose();
           const material = object.material as THREE.Material | THREE.Material[];
           if (Array.isArray(material)) material.forEach(item => item.dispose()); else material.dispose();
+        } else if (object instanceof THREE.Line || object instanceof THREE.LineLoop) {
+          (object.geometry as THREE.BufferGeometry).dispose();
+          const material = object.material as THREE.Material;
+          material.dispose();
         }
       });
       renderer.dispose();
