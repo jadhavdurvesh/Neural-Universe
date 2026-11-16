@@ -1,33 +1,34 @@
 # Neural Universe
 
-**A browser-based interactive 3D laboratory for brain-inspired computational neural networks.**
+**A browser-based 3D laboratory for brain-inspired computational neural networks.**
 
-Neural Universe presents a live spiking neural simulation as an explorable 3D environment. Neurons are computational units; synapses are weighted, directed connections; the 3D scene visualizes the running model state.
+Neural Universe combines an explorable Three.js neural field with a simulation engine running in a dedicated Web Worker. Neurons and synapses are computational entities; the 3D scene visualizes the live model state.
 
-## Features in v0.1.0
+## Current capabilities (Alpha 0.2)
 
-- Three.js 3D neural field with orbit, zoom and neuron selection.
-- Leaky integrate-and-fire (LIF) neuron dynamics.
-- Excitatory and inhibitory neuron populations.
-- Sparse, distance-biased recurrent synaptic connectivity.
-- Delayed synaptic event delivery.
-- Pair-based spike-timing-dependent plasticity (STDP) approximation.
-- External population stimulation, pause/resume, reset and speed controls.
-- Live membrane-state inspector and network metrics.
-- Responsive browser interface.
+- Interactive Three.js 3D network with orbit, zoom, neuron selection and animated in-flight synaptic events.
+- Simulation runs in a dedicated Web Worker, keeping numerical stepping off the browser UI thread.
+- Configurable excitatory and inhibitory populations.
+- Two neuron dynamics: leaky integrate-and-fire (LIF) and Izhikevich regular-spiking.
+- Sparse, distance-biased recurrent connectivity with delayed synaptic event delivery.
+- Basic pair-based spike-timing-dependent plasticity (STDP) approximation.
+- Add neuron populations (up to 1,200 neurons in this prototype).
+- Circuit editor: create and remove directed weighted synapses with configurable delays.
+- Live membrane state, spike count, connectivity and network metrics.
+- Responsive browser-first interface.
 
 ## Requirements
 
 Node.js 20+ and npm 10+.
 
-## Local development
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the local address printed by Vite (normally http://localhost:5173).
+Vite prints the local URL (normally http://localhost:5173).
 
 ## Production build
 
@@ -38,25 +39,27 @@ npm run preview
 
 ## Architecture
 
-- `src/engine/BrainNetwork.ts` — computational network state and simulation stepping.
-- `src/components/NeuralScene.tsx` — Three.js rendering and interaction.
-- `src/App.tsx` — laboratory UI, controls and metrics.
-- `src/style.css` — responsive interface styling.
+- `src/engine/BrainNetwork.ts` — computational model, neuron populations, delayed synaptic events, plasticity and snapshots.
+- `src/engine/protocol.ts` — typed messages between the application and worker.
+- `src/engine/simulation.worker.ts` — background simulation scheduler and command processor.
+- `src/components/NeuralScene.tsx` — Three.js visualization, navigation, picking and signal rendering.
+- `src/App.tsx` — browser laboratory interface, population builder and circuit editor.
+- `src/style.css` — responsive presentation.
 
-The simulation owns neuron and synapse state. The renderer reads that state and visualizes it; it does not determine neural computation.
+The worker owns simulation state. React receives periodic serializable snapshots. Three.js renders those snapshots and never performs neural computation.
 
 ## Scientific scope and limitations
 
-This is an experimental software prototype, **not a validated biological brain model**. It uses a simplified leaky integrate-and-fire model, distance-biased random connectivity, stochastic background input and a basic pair-based STDP rule. Parameters are illustrative. Detailed ion-channel dynamics, neurotransmitter chemistry, anatomical brain regions and validated biological datasets are not implemented. It does not claim brain-level intelligence.
+This is an experimental software prototype, **not a validated biological brain model**. The LIF implementation is simplified. The Izhikevich implementation uses regular-spiking parameters with a basic numerical integration scheme. Connectivity is generated procedurally from spatial distance, and STDP is a basic pair-trace approximation. Detailed ion-channel dynamics, neurotransmitter chemistry, anatomical brain regions, calibrated biological datasets and validation studies are not yet implemented. Metrics and visualizations should be treated as exploratory rather than neuroscientific evidence.
 
-## Roadmap
+## Next milestones
 
-1. Move simulation stepping into a Web Worker and make simulation time deterministic.
-2. Add configurable neuron populations, connection rules and parameter editors.
+1. Add deterministic simulation/replay and automated unit tests for neuron and synapse dynamics.
+2. Add population-specific parameter editing and configurable connection rules.
 3. Add raster plots, membrane-potential traces, weight distributions and experiment export.
 4. Add checkpointing and versioned experiment files.
-5. Add persistent projects and collaboration for cloud workflows.
-6. Add optional Izhikevich and Hodgkin–Huxley neuron models.
+5. Add optional Hodgkin–Huxley and additional Izhikevich firing patterns.
+6. Evaluate performance and numerical behavior against published reference cases.
 
 ## License
 
