@@ -25,3 +25,45 @@
 .error-callout{margin-top:15px;border:1px solid #74443e;background:#2a191a;color:#f2aaa0;border-radius:6px;padding:9px;font-size:9px;line-height:1.5}
 @media(max-width:1180px){.workspace{grid-template-columns:230px minmax(350px,1fr)}.right-panel{display:none}.brand{min-width:220px}}
 @media(max-width:700px){.app-shell{height:auto;min-height:100vh}.topbar{padding:0 12px}.brand{min-width:0}.brand-sub{font-size:7px}.top-status{font-size:8px}.version{display:none}.workspace{display:flex;flex-direction:column}.left-panel{order:2;border-right:0;border-top:1px solid #1b2a3a}.center-stage{order:1;padding:0 10px}.scene-wrap{height:58vh;min-height:380px;flex:none}.stage-toolbar{height:58px}.timeline{height:58px}.left-panel{display:block}.scene-hint{font-size:7px}.stage-actions .tool{font-size:0}.stage-actions .tool svg{width:16px;height:16px}.scene-label{font-size:7px;gap:4px}.scene-label-bottom span{font-size:7px}}
+
+/* Alpha 0.3 — organic morphology visual system */
+:root{--nu-bg:#070d17;--nu-panel:#0b1420;--nu-line:#1d3043;--nu-muted:#7690a8;--nu-cyan:#75d5ff;--nu-violet:#b49aff}
+.app-shell{background:radial-gradient(ellipse at 51% 44%,#101d2b 0%,#09111d 46%,#070b13 100%)}
+.topbar{background:rgba(7,13,23,.94);border-bottom-color:#1b2c3e;box-shadow:0 8px 30px #0002}
+.brand-mark{border-color:#2b5876;background:linear-gradient(145deg,#15334c,#0c1724);box-shadow:0 0 20px #3b9ed21a}
+.brand-name{letter-spacing:1.9px}
+.left-panel,.right-panel{background:rgba(9,16,27,.92);backdrop-filter:blur(14px)}
+.panel-label{color:#6e8aa4;letter-spacing:1.35px}
+.environment-card{background:linear-gradient(125deg,#10253a,#0d1927);border-color:#294b66;box-shadow:inset 0 1px #ffffff08}
+.center-stage{padding-left:20px;padding-right:20px}
+.stage-toolbar{height:70px}
+.stage-title b{font-size:14px;letter-spacing:.1px}
+.stage-actions{gap:7px}
+.tool{padding:8px 11px;border-color:#273d52;background:#0c1724;transition:background .18s,border-color .18s,color .18s}
+.tool:hover{border-color:#4a7899;color:#c2eaff;background:#102235}
+.tool.active{background:#15324a;border-color:#4285ac;color:#b8e6ff;box-shadow:inset 0 0 14px #4598c31a}
+.scene-wrap{border:1px solid #294158;border-radius:13px;background:radial-gradient(ellipse at 50% 44%,#0c1928 0%,#080f1a 54%,#070c15 100%);box-shadow:inset 0 0 100px #1a42651a,0 18px 45px #0003}
+.scene-wrap:after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(180deg,#07111a18,transparent 22%,transparent 76%,#07111a40)}
+.scene-label{z-index:2}
+.scene-label-top{left:16px;right:auto;top:16px;gap:8px;padding:9px 12px;border:1px solid #263d51;border-radius:8px;background:#091421c9;backdrop-filter:blur(9px);color:#9db5ca;letter-spacing:.2px}
+.scene-label-top .legend-dot{margin-left:3px}
+.scene-label-bottom{left:16px;right:16px;bottom:14px;padding:8px 10px;border:1px solid #1d3346;border-radius:7px;background:#091421b8;color:#8ba6be}
+.scene-label-bottom span{color:#7094b0}
+.scene-hint{z-index:3;bottom:17px;padding:7px 12px;border:1px solid #294158;border-radius:20px;background:#07111dcc;color:#8ca9c2;letter-spacing:.45px;backdrop-filter:blur(8px)}
+.scene-hint span{color:#4d7896}
+.timeline{height:72px}
+.timeline-track{background:#1b2d40;height:4px}
+.timeline-fill{background:linear-gradient(90deg,#378bb9,#74d5ff);box-shadow:0 0 12px #4db9ed77}
+.metric-card{border-color:#263b50;background:linear-gradient(145deg,#101e2d,#0c1622)}
+.metric-card b{color:#e0effb}
+.population-row{background:linear-gradient(115deg,#0d1927,#0c1520);border-color:#22374b;transition:border-color .18s,transform .18s}
+.population-row:hover{border-color:#3a6687;transform:translateX(2px)}
+.population-dot{box-shadow:0 0 9px currentColor}
+.selected-neuron{background:linear-gradient(125deg,#122a3e,#0d1b2a);border-color:#315774}
+.neuron-avatar{background:#173b55;box-shadow:inset 0 0 16px #58b8ed1c}
+.form-stack input,.form-stack select{background:#0a1420;border-color:#25394d}
+.form-stack input:focus,.form-stack select:focus{border-color:#65b5df;box-shadow:0 0 0 2px #65b5df1c}
+.wide-button{transition:border-color .18s,background .18s,transform .18s}
+.wide-button:active,.transport-main:active,.tool:active{transform:translateY(1px)}
+.callout{border-color:#294458;background:linear-gradient(120deg,#102234,#0d1926)}
+@media(max-width:700px){.center-stage{padding-left:10px;padding-right:10px}.stage-toolbar{height:60px}.scene-wrap{border-radius:10px}.scene-label-top{max-width:calc(100% - 24px);flex-wrap:wrap}.scene-hint{bottom:48px}}
