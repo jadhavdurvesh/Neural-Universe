@@ -28,7 +28,7 @@ export default function NeuralScene({network,running,selected,onSelect}:Props){
    for(let i=0;i<net.synapses.length;i++){const s=net.synapses[i],a=net.neurons[s.from],b=net.neurons[s.to],k=i*6;edgePositions.set([a.x,a.y,a.z,b.x,b.y,b.z],k);const c=s.weight<0?new THREE.Color('#ff806e'):new THREE.Color('#477ca8'),alpha=Math.min(.8,.12+Math.abs(s.weight)*.075);edgeColors.set([c.r*alpha,c.g*alpha,c.b*alpha,c.r*alpha,c.g*alpha,c.b*alpha],k);}
    edgeGeo.attributes.position.needsUpdate=true;edgeGeo.attributes.color.needsUpdate=true;
    const active=net.spikes,pulsePositions=new Float32Array(active.length*3);active.forEach((p,i)=>{const n=net.neurons[p.neuron];pulsePositions[i*3]=n.x;pulsePositions[i*3+1]=n.y;pulsePositions[i*3+2]=n.z;});pulseGeo.setAttribute('position',new THREE.BufferAttribute(pulsePositions,3));
-   points.rotation.y+=state.current.running?.00035:0;stars.rotation.y+=.000025;renderer.render(scene,camera);
+   points.rotation.y+=state.current.running ? 0.00035 : 0;stars.rotation.y+=.000025;renderer.render(scene,camera);
   };animate();
   return()=>{cancelAnimationFrame(frame);observer.disconnect();renderer.domElement.removeEventListener('pointerdown',click);controls.dispose();geometry.dispose();material.dispose();edgeGeo.dispose();edgeMat.dispose();pulseGeo.dispose();pulseMat.dispose();starGeo.dispose();renderer.dispose();root.removeChild(renderer.domElement);};
  },[]);
