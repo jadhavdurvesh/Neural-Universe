@@ -50,7 +50,7 @@ export class BrainNetwork{
    this.neurons.push({id:this.neurons.length,populationId:p.id,model:p.model,kind:p.kind,x:cx+r*Math.sin(phi)*Math.cos(theta),y:cy+r*Math.sin(phi)*Math.sin(theta),z:cz+r*Math.cos(phi),v:-65,u:-13,threshold:p.model==='izhikevich'?30:-50,rest:-65,tau:18,refractory:3,refractoryLeft:0,spikes:0,lastSpike:-1000,activity:0,externalCurrent:0});
   }
   this.populations.push(p);
-  if(connect)for(let i=start;i<this.neurons.length;i++)for(let j=0;j<this.neurons.length;j++)if(i!==j){const a=this.neurons[i],b=this.neurons[j],d=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z);if(this.random()<.075*Math.exp(-d/6.2))this.addSynapse(i,j,undefined,Math.max(1,Math.round(d/2.2)));}
+  if(connect)for(let i=0;i<this.neurons.length;i++)for(let j=0;j<this.neurons.length;j++)if(i!==j&&(i>=start||j>=start)){const a=this.neurons[i],b=this.neurons[j],d=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z);if(this.random()<.075*Math.exp(-d/6.2))this.addSynapse(i,j,undefined,Math.max(1,Math.round(d/2.2)));}
  }
  private addSynapse(from:number,to:number,weight?:number,delay=1){
   const sign=this.neurons[from].kind==='inhibitory'?-1:1,mag=weight===undefined?.8+this.random()*2.4:Math.max(.08,Math.abs(weight));
@@ -69,8 +69,11 @@ export class BrainNetwork{
   this.addSynapse(from,to,weight,Math.max(1,Math.min(100,Math.floor(delay))));this.rebuildAdjacency();this.topologyVersion++;
  }
  disconnect(from:number,to:number){
-  const n=this.synapses.length;this.synapses=this.synapses.filter(s=>!(s.from===from&&s.to===to));
-  if(this.synapses.length!==n){this.synapses.forEach((s,i)=>s.id=i);this.deliveries=this.deliveries.filter(e=>!(e.from===from&&e.to===to));this.rebuildAdjacency();this.topologyVersion++;}
+  const removed=this.synapses.find(s=>s.from===from&&s.to===to);if(!removed)return;
+  this.synapses=this.synapses.filter(s=>s.id!==removed.id);this.synapses.forEach((s,i)=>s.id=i);
+  this.deliveries=this.deliveries.filter(e=>e.synapseId!==removed.id);
+  for(const event of this.deliveries)if(event.synapseId>removed.id)event.synapseId--;
+  this.rebuildAdjacency();this.topologyVersion++;
  }
  stimulate(strength=18){for(const n of this.neurons)if(n.id%7===0)n.externalCurrent+=strength;}
  step(input=0){
@@ -93,8 +96,9 @@ export class BrainNetwork{
   }
   const firedSet=new Set(fired);
   for(const id of fired){
-   for(const s of this.outgoing[id]){if(s.pending<4){s.pending++;this.deliveries.push({synapseId:s.id,from:id,to:s.to,due:this.time+s.delay,born:this.time,weight:s.weight});}if(this.enabledPlasticity)this.adjustWeight(s,.012*s.postTrace);}
-   if(this.enabledPlasticity)for(const s of this.incoming[id])this.adjustWeight(s,-.009*s.preTrace);
+   // Pre-before-post pairs potentiate; post-before-pre pairs depress.
+   for(const s of this.outgoing[id]){if(s.pending<4){s.pending++;this.deliveries.push({synapseId:s.id,from:id,to:s.to,due:this.time+s.delay,born:this.time,weight:s.weight});}if(this.enabledPlasticity)this.adjustWeight(s,-.009*s.postTrace);}
+   if(this.enabledPlasticity)for(const s of this.incoming[id])this.adjustWeight(s,.012*s.preTrace);
   }
   for(const s of this.synapses){s.preTrace*=.96;s.postTrace*=.96;if(firedSet.has(s.from))s.preTrace++;if(firedSet.has(s.to))s.postTrace++;}
   return fired.length;
